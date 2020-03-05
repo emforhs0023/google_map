@@ -30,15 +30,13 @@
 	<% for (var i =0; i < results.length; i++) { %>
 		
 		<script type="text/javascript">
-			
-			
-				positions.push({
-					lat: <%= results[i].geometry.location.lat %>,
-					lng: <%= results[i].geometry.location.lng %>,
-					name: "<%= results[i].name%>",
-					id: "<%= results[i].id%>"
-				})
-				
+			positions.push({
+				lat: <%= results[i].geometry.location.lat %>,
+				lng: <%= results[i].geometry.location.lng %>,
+				name: "<%= results[i].name%>",
+				id: "<%= results[i].id%>",
+				address: "<%= results[i].formatted_address%>"
+			})
 		</script>
 
 	<% } %>
@@ -54,23 +52,45 @@
 			var markers = positions.map((location, i) => {
 				return new google.maps.Marker({
 		          	position: {lat:location.lat, lng:location.lng},
-					name: location.name
+					name: location.name,
+					address: location.address
 				});
 			});
+			var contentString
 
-			const infowindow = new google.maps.InfoWindow()
+			const adsf = (j, d) => {
+				const jb = j
+				const db = d
+				return  `${jb}<br />${db}`
+			}
+ 
+			
 
-			const data123 = (j) => {
+			var infowindow = new google.maps.InfoWindow({
+				content:contentString,
+				maxWidth: 350
+			});
+			// const contentString = (j, d) => {
+			// 	// <div id="content"> </div>'+
+			// }
+
+			// const infowindow = new google.maps.InfoWindow()
+
+			const data123 = (j, d) => {
 				markers[i].addListener('click', (event) => {
-					infowindow.setContent(j)
+					// content: contentString(j, d),
+					// infowindow.setContent(j)
+					// infowindow.setContent( `${d}<br/>, ${j}`)
+					infowindow.setContent(adsf(j, d))
+					
 					infowindow.setPosition(event.latLng);
 					infowindow.open(map);
 				});
 			}
 			    
   			
-			for(var i=0; i < markers.length; i++){
-				data123(markers[i].name)
+			for(var i = 0; i < markers.length; i++){
+				data123(markers[i].name, markers[i].address)
 			}
 			
 			var markerCluster = new MarkerClusterer(map, markers,

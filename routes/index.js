@@ -32,7 +32,7 @@ router.get('/search/:query', async (req, res, next) => {
             query: req.params.query,
             language: 'ko',
         });
-        console.log(response.json.results)
+        
         res.render('result', {
             title: `${req.params.query} 검색 결과`,
             results: response.json.results,
