@@ -1,0 +1,85 @@
+<%- contentFor('body') %>
+	<style>
+		.gm-style .gm-style-iw-c {
+			position: absolute;
+			box-sizing: border-box;
+			overflow: hidden;
+			top: -39px;
+			left: 0;
+			transform: translate(-50%,-100%);
+			background-color: white;
+			border-radius: 8px;
+			padding: 12px;
+			box-shadow: 0 2px 7px 1px rgba(0,0,0,0.3);
+		}
+		.gm-style .gm-style-iw-t::after {
+			background: linear-gradient(45deg,rgba(255,255,255,1) 50%,rgba(255,255,255,0) 51%,rgba(255,255,255,0) 100%);
+			box-shadow: -2px 2px 2px 0 rgba(178,178,178,.4);
+			content: "";
+			height: 15px;
+			left: 0;
+			position: absolute;
+			top: -39px;
+			transform: translate(-50%,-50%) rotate(-45deg);
+			width: 15px;
+		}
+	</style>
+	<script type="text/javascript">
+		var positions = [];
+	</script>
+	<% for (var i =0; i < results.length; i++) { %>
+		
+		<script type="text/javascript">
+			
+			
+				positions.push({
+					lat: <%= results[i].geometry.location.lat %>,
+					lng: <%= results[i].geometry.location.lng %>,
+					name: "<%= results[i].name%>",
+					id: "<%= results[i].id%>"
+				})
+				
+		</script>
+
+	<% } %>
+	<script type="text/javascript">
+
+		function initMap() {
+			var center = positions[0] || { lat: 37.540705, lng: 126.956764 }; //지도 중앙에 놓기
+			var map = new google.maps.Map(document.getElementById('map'), { // 프론트쪽 api
+				zoom: 13,
+				center: center
+	      	});
+	      
+			var markers = positions.map((location, i) => {
+				return new google.maps.Marker({
+		          	position: {lat:location.lat, lng:location.lng},
+					name: location.name
+				});
+			});
+
+			const infowindow = new google.maps.InfoWindow()
+
+			const data123 = (j) => {
+				markers[i].addListener('click', (event) => {
+					infowindow.setContent(j)
+					infowindow.setPosition(event.latLng);
+					infowindow.open(map);
+				});
+			}
+			    
+  			
+			for(var i=0; i < markers.length; i++){
+				data123(markers[i].name)
+			}
+			
+			var markerCluster = new MarkerClusterer(map, markers,
+            	{imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+  		}
+  		
+  	</script>
+	<div id="map"></div>
+<!-- <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script> -->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuUZ5g6LQMZNWJDL7AC6xhyXCt9RvVXB8&amp;callback=initMap"></script> 
+<!-- <script async defer> </script> =>  -->
+

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script type="text/javascript" src="/js/axios.js"></script>
+        <link rel="stylesheet" href="/main.css" />
+    </head>
+    <body>
+        <div id="wrapper">
+            <header>
+                
+            </header> 
+            <main>
+                <div class="container" >
+                    
+                    
+                    <form id="search-form" method="get">
+                        <span>장소 검색 서비스</span>
+                        <input id="search">
+                        <button class="btn" id="search-btn">검색</button>
+                        <ul id="search-list"></ul>
+                    </form>
+                    
+                    <script type="text/javascript">
+                        document.querySelector('#search-form').addEventListener('submit', function (e) {
+                            e.preventDefault();
+                            if (!this.search.value || !this.search.value.trim()) {
+                                this.search.focus();
+                                alert("위치를 적어주세요")
+                                return false;
+                            }
+                            this.action = '/search/' + this.search.value.trim();
+                            return this.submit();
+                        })
+                    </script>
+                    <div id="maps"></div>
+                    <%- body %>
+                </div>
+            </main>
+            <footer>
+                <div class="row">
+                    <!-- footer -->
+                </div>
+            </footer>
+            <%- script %>
+        </div>
+    </body>
+</html>
+
